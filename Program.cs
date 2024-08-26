@@ -1,7 +1,7 @@
 using MycleanerService;
 
 var builder = Host.CreateDefaultBuilder(args).UseWindowsService(options =>{
-    options.ServiceName="MyCleaner Service";
+    options.ServiceName="HardDriveHygiene Service";
 });
 
 builder.ConfigureServices(
