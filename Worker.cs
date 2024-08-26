@@ -22,14 +22,9 @@ public class Worker : BackgroundService
         .CreateLogger();
 
         string temp = @"C:\Windows\Temp";
-        string temp2 =Path.Combine(@$"C:\Users\{Environment.UserName}\AppData\Local\Temp");
+        string temp2 =Path.Combine(@$"C:\Users\{Environment.UserName}\AppData\Local\Temp","*.*",searchOptions=ALL);
         string prefecth = @"C:\Windows\Prefetch";
-        var directories = new List<string>{
-            temp,
-            temp2,
-            prefecth
-        };
-
+        string[] directories = {temp,temp2,prefecth};
         while (!stoppingToken.IsCancellationRequested)
         {
             Log.Information("We are about to cleanup the temporary directories");
