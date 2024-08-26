@@ -1,3 +1,4 @@
+using System.IO;
 using System.IO.Enumeration;
 using System.Linq.Expressions;
 using Serilog;
@@ -51,19 +52,24 @@ public class Worker : BackgroundService
         {
             System.Console.WriteLine($"CleanupRecursively is taking :{rootDirectory}");
                 // Check if the root directory exists
-                if (!Directory.Exists(rootDirectory))
-                    return;
-
+                if (Directory.Exists(rootDirectory)){
                 // Get all directories in the root directory
                 var directories = Directory.GetDirectories(rootDirectory);
-
-                foreach (var dir in directories)
+                if (directories.Length > 0)
                 {
-                    // Clean up files in the current directory
-                    CleanUp(Path.Combine(rootDirectory, Path.GetFileName(dir)));
-                    // Recursively clean up subdirectories
-                    CleanUpRecursively(dir);
+                    foreach (var dir in directories)
+                    {
+                        // Recursively clean up subdirectories
+                        CleanUpRecursively(dir);
+                        // Clean up files in the current directory
+                        CleanUp(Path.Combine(rootDirectory, Path.GetFileName(dir)));
+
+                    }
                 }
+                CleanUp(rootDirectory);
+            }
+                
+
             
         }
         catch (Exception ex)
@@ -80,18 +86,20 @@ public class Worker : BackgroundService
         {
             System.Console.WriteLine($"CleanUp is being called with directory path :{directoryPath}");
                 // Check if the directory exists
-                if (!Directory.Exists(directoryPath))
-                    return;
-
+                if (Directory.Exists(directoryPath)){
                 // Get all files in the directory
                 var files = Directory.GetFiles(directoryPath);
-
-                foreach (var file in files)
+                if (files.Length > 0)
                 {
-                    // Delete each file
-                    File.Delete(file);
-                    System.Console.WriteLine($"We are deleting {file}");
+                    foreach (var file in files)
+                    {
+                        // Delete each file
+                        File.Delete(file);
+                        System.Console.WriteLine($"We are deleting {file}");
+                    }
                 }
+                Directory.Delete(directoryPath);
+            }
             
         }
         catch (Exception ex)
